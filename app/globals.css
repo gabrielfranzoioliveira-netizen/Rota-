@@ -1,0 +1,256 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 180 100% 92%;
+  --foreground: 174 55% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 174 55% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 174 55% 11%;
+  --primary: 176 100% 17%;
+  --primary-foreground: 180 100% 98%;
+  --secondary: 176 46% 37%;
+  --secondary-foreground: 180 100% 98%;
+  --muted: 180 45% 91%;
+  --muted-foreground: 176 20% 37%;
+  --accent: 176 45% 56%;
+  --accent-foreground: 174 55% 11%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 176 32% 86%;
+  --input: 176 32% 86%;
+  --ring: 176 100% 17%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 176 39% 8%;
+  --foreground: 180 100% 96%;
+  --card: 176 34% 12%;
+  --card-foreground: 180 100% 96%;
+  --popover: 176 34% 12%;
+  --popover-foreground: 180 100% 96%;
+  --primary: 176 62% 64%;
+  --primary-foreground: 176 60% 8%;
+  --secondary: 176 39% 22%;
+  --secondary-foreground: 180 100% 96%;
+  --muted: 176 30% 16%;
+  --muted-foreground: 176 24% 72%;
+  --accent: 176 45% 56%;
+  --accent-foreground: 176 60% 8%;
+  --destructive: 0 70% 58%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 176 28% 22%;
+  --input: 176 28% 22%;
+  --ring: 176 62% 64%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(156, 224, 219, 0.45), transparent 26rem),
+    radial-gradient(circle at bottom right, rgba(0, 89, 84, 0.18), transparent 30rem),
+    linear-gradient(135deg, #f8ffff 0%, #e8fbfa 46%, #c8f8f6 100%);
+  color: hsl(var(--foreground));
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  overflow: hidden;
+}
+
+.dark body {
+  background:
+    radial-gradient(circle at top left, rgba(51, 139, 133, 0.2), transparent 28rem),
+    linear-gradient(180deg, #061f1e 0%, #0c302d 100%);
+}
+
+::selection {
+  background: rgba(93, 193, 185, 0.35);
+}
+
+.focus-ring {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+}
+
+.a11y-large-text .mobile-app-screen {
+  font-size: 1.06rem;
+}
+
+.a11y-extra-text .mobile-app-screen {
+  font-size: 1.13rem;
+}
+
+.a11y-high-contrast {
+  --foreground: 174 80% 6%;
+  --muted-foreground: 176 35% 24%;
+  --border: 176 45% 55%;
+}
+
+.a11y-high-contrast .mobile-app-screen {
+  filter: contrast(1.08);
+}
+
+.a11y-low-vision .mobile-app-screen {
+  letter-spacing: 0;
+}
+
+.a11y-low-vision button,
+.a11y-low-vision a,
+.a11y-low-vision input,
+.a11y-low-vision select {
+  outline-offset: 4px;
+}
+
+.a11y-large-controls button,
+.a11y-large-controls a[role="button"] {
+  min-height: 48px;
+}
+
+.map-grid {
+  background-image:
+    linear-gradient(rgba(0, 89, 84, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 89, 84, 0.08) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+
+.mobile-device-stage {
+  display: flex;
+  min-height: 100dvh;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.mobile-device-frame {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  height: 100dvh;
+  width: 100vw;
+  flex-direction: column;
+  overflow: hidden;
+  background: hsl(var(--background));
+  transform: translateZ(0);
+}
+
+.mobile-status-bar {
+  display: none;
+}
+
+.mobile-app-screen {
+  position: relative;
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(156, 224, 219, 0.45), transparent 18rem),
+    linear-gradient(180deg, #f8ffff 0%, #eefefe 42%, #d5ffff 100%);
+  scrollbar-width: none;
+}
+
+.mobile-app-screen::-webkit-scrollbar {
+  display: none;
+}
+
+.mobile-app-screen .min-h-screen {
+  min-height: 100%;
+}
+
+.mobile-app-screen [class*="max-w-7xl"],
+.mobile-app-screen [class*="max-w-6xl"],
+.mobile-app-screen [class*="max-w-4xl"],
+.mobile-app-screen [class*="max-w-3xl"],
+.mobile-app-screen [class*="max-w-2xl"] {
+  max-width: 100% !important;
+}
+
+.mobile-app-screen [class*="sm:grid-cols"],
+.mobile-app-screen [class*="md:grid-cols"],
+.mobile-app-screen [class*="lg:grid-cols"],
+.mobile-app-screen [class*="xl:grid-cols"] {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.mobile-app-screen [class*="sm:flex-row"],
+.mobile-app-screen [class*="md:flex-row"],
+.mobile-app-screen [class*="lg:flex-row"],
+.mobile-app-screen [class*="xl:flex-row"] {
+  flex-direction: column !important;
+}
+
+.mobile-app-screen .hidden[class*="md:flex"],
+.mobile-app-screen .hidden[class*="lg:flex"],
+.mobile-app-screen .hidden[class*="xl:flex"],
+.mobile-app-screen .hidden[class*="md:block"],
+.mobile-app-screen .hidden[class*="lg:block"],
+.mobile-app-screen .hidden[class*="xl:block"] {
+  display: none !important;
+}
+
+.mobile-app-screen [class*="sm:p-6"],
+.mobile-app-screen [class*="lg:p-8"] {
+  padding: 1rem !important;
+}
+
+.mobile-app-screen [class*="sm:text-6xl"],
+.mobile-app-screen [class*="lg:text-7xl"] {
+  font-size: 3rem !important;
+  line-height: 1.04 !important;
+}
+
+.mobile-app-screen [class*="sm:text-4xl"] {
+  font-size: 1.875rem !important;
+  line-height: 2.25rem !important;
+}
+
+@media (min-width: 640px) {
+  .mobile-device-stage {
+    padding: 24px;
+  }
+
+  .mobile-device-frame {
+    height: min(900px, calc(100dvh - 48px));
+    width: min(430px, calc(100vw - 48px));
+    border: 1px solid rgba(0, 89, 84, 0.18);
+    border-radius: 38px;
+    box-shadow:
+      0 34px 120px rgba(0, 55, 52, 0.24),
+      0 0 0 12px rgba(255, 255, 255, 0.34);
+  }
+
+  .mobile-status-bar {
+    display: flex;
+    height: 34px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.88);
+    padding: 0 22px;
+    color: #005954;
+    font-size: 11px;
+    font-weight: 800;
+    backdrop-filter: blur(18px);
+  }
+
+  .dark .mobile-status-bar {
+    background: rgba(6, 31, 30, 0.9);
+    color: #9ce0db;
+  }
+
+  .mobile-home-indicator-top {
+    height: 4px;
+    width: 72px;
+    border-radius: 999px;
+    background: rgba(0, 89, 84, 0.22);
+  }
+}
