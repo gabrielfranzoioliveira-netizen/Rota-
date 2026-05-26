@@ -50,28 +50,30 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="min-h-screen">
-      <header className="sticky top-0 z-30 border-b bg-white/86 px-4 py-3 backdrop-blur-xl dark:bg-card/90">
-        <div className="flex items-center justify-between">
-          <Logo compact />
-          <div className="flex min-w-0 items-center gap-2">
-            <div className="hidden min-w-0 text-right min-[390px]:block">
-              <p className="truncate text-xs font-bold">{user?.name.split(" ")[0] ?? "Visitante"}</p>
-              <p className="text-[10px] font-semibold text-muted-foreground">
-                {user ? ROLE_LABELS[user.role] : "Demo"}
-              </p>
+    <div className={cn("min-h-screen", immersiveRideHome && "h-full min-h-0")}>
+      {!immersiveRideHome && (
+        <header className="sticky top-0 z-30 border-b bg-white/86 px-4 py-3 backdrop-blur-xl dark:bg-card/90">
+          <div className="flex items-center justify-between">
+            <Logo compact />
+            <div className="flex min-w-0 items-center gap-2">
+              <div className="hidden min-w-0 text-right min-[390px]:block">
+                <p className="truncate text-xs font-bold">{user?.name.split(" ")[0] ?? "Visitante"}</p>
+                <p className="text-[10px] font-semibold text-muted-foreground">
+                  {user ? ROLE_LABELS[user.role] : "Demo"}
+                </p>
+              </div>
+              <Button asChild variant="outline" size="icon" aria-label="Notificacoes">
+                <Link href="/notificacoes">
+                  <Bell className="size-4" aria-hidden="true" />
+                </Link>
+              </Button>
+              <button type="button" onClick={handleLogout} aria-label="Sair">
+                <Avatar initials={user?.avatar ?? "R+"} className="size-10" />
+              </button>
             </div>
-            <Button asChild variant="outline" size="icon" aria-label="Notificacoes">
-              <Link href="/notificacoes">
-                <Bell className="size-4" aria-hidden="true" />
-              </Link>
-            </Button>
-            <button type="button" onClick={handleLogout} aria-label="Sair">
-              <Avatar initials={user?.avatar ?? "R+"} className="size-10" />
-            </button>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
       {!immersiveRideHome && (
         <nav className="sticky top-[65px] z-20 flex gap-2 overflow-x-auto border-b bg-white/76 px-3 py-2 backdrop-blur-xl dark:bg-card/80">
           {navItems.slice(5).map((item) => {
@@ -94,7 +96,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           })}
         </nav>
       )}
-      <main className={immersiveRideHome ? "pb-0" : "pb-24"}>{children}</main>
+      <main className={immersiveRideHome ? "h-full min-h-0 overflow-hidden" : "pb-24"}>{children}</main>
       {!immersiveRideHome && (
         <nav className="fixed bottom-0 left-0 right-0 z-40 grid grid-cols-5 border-t bg-white/94 p-2 backdrop-blur-xl dark:bg-card/95">
           {navItems.slice(0, 5).map((item) => {

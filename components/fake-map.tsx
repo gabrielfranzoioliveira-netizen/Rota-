@@ -23,6 +23,7 @@ import { cn } from "@/lib/utils";
 interface FakeMapProps {
   compact?: boolean;
   className?: string;
+  showMapChrome?: boolean;
   showStatusSheet?: boolean;
 }
 
@@ -95,7 +96,12 @@ function blockFill(tone: (typeof cityBlocks)[number]["tone"]) {
   return "#ffffff";
 }
 
-export function FakeMap({ compact = false, className, showStatusSheet = true }: FakeMapProps) {
+export function FakeMap({
+  compact = false,
+  className,
+  showMapChrome = true,
+  showStatusSheet = true
+}: FakeMapProps) {
   const [zoom, setZoom] = useState(1);
   const [showAccessLayer, setShowAccessLayer] = useState(true);
   const [showTrafficLayer, setShowTrafficLayer] = useState(true);
@@ -329,81 +335,85 @@ export function FakeMap({ compact = false, className, showStatusSheet = true }: 
         )}
       </motion.div>
 
-      <div className="absolute inset-x-4 top-4 z-50 rounded-3xl border border-white/75 bg-white/92 p-3 shadow-soft backdrop-blur-xl dark:border-white/10 dark:bg-card/90">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#1a73e8]">
-              Rota+ Maps
-            </p>
-            <p className="mt-1 text-sm font-bold text-[#202124] dark:text-foreground">Pesquisar nesta area</p>
+      {showMapChrome && (
+        <>
+          <div className="absolute inset-x-4 top-4 z-50 rounded-3xl border border-white/75 bg-white/92 p-3 shadow-soft backdrop-blur-xl dark:border-white/10 dark:bg-card/90">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#1a73e8]">
+                  Rota+ Maps
+                </p>
+                <p className="mt-1 text-sm font-bold text-[#202124] dark:text-foreground">Pesquisar nesta area</p>
+              </div>
+              <div className="flex shrink-0 gap-2">
+                <Badge variant="soft" className="gap-1">
+                  <Radar className="size-3.5" aria-hidden="true" />
+                  {nearbyVehicles.length}
+                </Badge>
+                <Badge variant="outline" className="bg-white/80 dark:bg-card/80">
+                  {etaMinutes} min
+                </Badge>
+              </div>
+            </div>
           </div>
-          <div className="flex shrink-0 gap-2">
-            <Badge variant="soft" className="gap-1">
-              <Radar className="size-3.5" aria-hidden="true" />
-              {nearbyVehicles.length}
-            </Badge>
-            <Badge variant="outline" className="bg-white/80 dark:bg-card/80">
-              {etaMinutes} min
-            </Badge>
+
+          <div className="absolute right-4 top-24 z-50 grid gap-2">
+            <button
+              type="button"
+              className="focus-ring flex size-10 items-center justify-center rounded-2xl border border-white/75 bg-white/92 text-brand-primary shadow-soft backdrop-blur-xl dark:border-white/10 dark:bg-card/90"
+              aria-label="Aumentar zoom do mapa"
+              onClick={() => setZoom((value) => Math.min(1.12, Number((value + 0.04).toFixed(2))))}
+            >
+              <Plus className="size-4" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="focus-ring flex size-10 items-center justify-center rounded-2xl border border-white/75 bg-white/92 text-brand-primary shadow-soft backdrop-blur-xl dark:border-white/10 dark:bg-card/90"
+              aria-label="Diminuir zoom do mapa"
+              onClick={() => setZoom((value) => Math.max(0.94, Number((value - 0.04).toFixed(2))))}
+            >
+              <Minus className="size-4" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="focus-ring flex size-10 items-center justify-center rounded-2xl border border-white/75 bg-white/92 text-brand-primary shadow-soft backdrop-blur-xl dark:border-white/10 dark:bg-card/90"
+              aria-label="Centralizar minha localizacao"
+              onClick={() => setZoom(1)}
+            >
+              <LocateFixed className="size-4" aria-hidden="true" />
+            </button>
           </div>
-        </div>
-      </div>
 
-      <div className="absolute right-4 top-24 z-50 grid gap-2">
-        <button
-          type="button"
-          className="focus-ring flex size-10 items-center justify-center rounded-2xl border border-white/75 bg-white/92 text-brand-primary shadow-soft backdrop-blur-xl dark:border-white/10 dark:bg-card/90"
-          aria-label="Aumentar zoom do mapa"
-          onClick={() => setZoom((value) => Math.min(1.12, Number((value + 0.04).toFixed(2))))}
-        >
-          <Plus className="size-4" aria-hidden="true" />
-        </button>
-        <button
-          type="button"
-          className="focus-ring flex size-10 items-center justify-center rounded-2xl border border-white/75 bg-white/92 text-brand-primary shadow-soft backdrop-blur-xl dark:border-white/10 dark:bg-card/90"
-          aria-label="Diminuir zoom do mapa"
-          onClick={() => setZoom((value) => Math.max(0.94, Number((value - 0.04).toFixed(2))))}
-        >
-          <Minus className="size-4" aria-hidden="true" />
-        </button>
-        <button
-          type="button"
-          className="focus-ring flex size-10 items-center justify-center rounded-2xl border border-white/75 bg-white/92 text-brand-primary shadow-soft backdrop-blur-xl dark:border-white/10 dark:bg-card/90"
-          aria-label="Centralizar minha localizacao"
-          onClick={() => setZoom(1)}
-        >
-          <LocateFixed className="size-4" aria-hidden="true" />
-        </button>
-      </div>
-
-      <div className="absolute left-4 top-24 z-50 grid gap-2">
-        <button
-          type="button"
-          className={cn(
-            "focus-ring flex items-center gap-2 rounded-2xl border px-3 py-2 text-[11px] font-bold shadow-soft backdrop-blur-xl",
-            showAccessLayer
-              ? "border-[#d2e3fc] bg-[#1a73e8] text-white"
-              : "border-white/75 bg-white/92 text-brand-primary dark:border-white/10 dark:bg-card/90"
-          )}
-          onClick={() => setShowAccessLayer((value) => !value)}
-        >
-          <Layers3 className="size-3.5" aria-hidden="true" />
-          Acesso
-        </button>
-        <button
-          type="button"
-          className={cn(
-            "focus-ring flex items-center gap-2 rounded-2xl border px-3 py-2 text-[11px] font-bold shadow-soft backdrop-blur-xl",
-            showTrafficLayer
-              ? "border-emerald-200 bg-white/95 text-[#188038]"
-              : "border-white/75 bg-white/80 text-muted-foreground dark:border-white/10 dark:bg-card/90"
-          )}
-          onClick={() => setShowTrafficLayer((value) => !value)}
-        >
-          <TrafficCone className="size-3.5" aria-hidden="true" />
-          Transito
-        </button>
-      </div>
+          <div className="absolute left-4 top-24 z-50 grid gap-2">
+            <button
+              type="button"
+              className={cn(
+                "focus-ring flex items-center gap-2 rounded-2xl border px-3 py-2 text-[11px] font-bold shadow-soft backdrop-blur-xl",
+                showAccessLayer
+                  ? "border-[#d2e3fc] bg-[#1a73e8] text-white"
+                  : "border-white/75 bg-white/92 text-brand-primary dark:border-white/10 dark:bg-card/90"
+              )}
+              onClick={() => setShowAccessLayer((value) => !value)}
+            >
+              <Layers3 className="size-3.5" aria-hidden="true" />
+              Acesso
+            </button>
+            <button
+              type="button"
+              className={cn(
+                "focus-ring flex items-center gap-2 rounded-2xl border px-3 py-2 text-[11px] font-bold shadow-soft backdrop-blur-xl",
+                showTrafficLayer
+                  ? "border-emerald-200 bg-white/95 text-[#188038]"
+                  : "border-white/75 bg-white/80 text-muted-foreground dark:border-white/10 dark:bg-card/90"
+              )}
+              onClick={() => setShowTrafficLayer((value) => !value)}
+            >
+              <TrafficCone className="size-3.5" aria-hidden="true" />
+              Transito
+            </button>
+          </div>
+        </>
+      )}
 
       {showStatusSheet && (
         <div className="absolute inset-x-4 bottom-4 z-50 rounded-[1.4rem] border border-white/75 bg-white/94 p-4 shadow-premium backdrop-blur-xl dark:border-white/10 dark:bg-card/94">

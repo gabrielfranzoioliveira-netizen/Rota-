@@ -3,7 +3,10 @@ node_modules
 out
 dist
 .npm-cache
+.chrome-mobile-check
 tsconfig.tsbuildinfo
+mobile-passenger*.png
+dev-*.log
 .env*.local
 npm-debug.log*
 yarn-debug.log*

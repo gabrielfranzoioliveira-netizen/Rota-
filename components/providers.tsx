@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { WifiOff } from "lucide-react";
 import { useHydrated } from "@/hooks/use-hydrated";
 import { useNetworkStatus } from "@/hooks/use-network-status";
@@ -8,10 +9,12 @@ import { defaultAccessibilityPreferences, useUiStore } from "@/context/ui-store"
 import { VoiceCommandDock } from "@/components/voice-command-dock";
 
 export function Providers({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const hydrated = useHydrated();
   const darkMode = useUiStore((state) => state.darkMode);
   const accessibilityPreferences = useUiStore((state) => state.accessibilityPreferences);
   const { online, simulatedOffline } = useNetworkStatus();
+  const immersiveRideHome = pathname === "/passageiro";
 
   useEffect(() => {
     const preferences = {
@@ -36,7 +39,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         </div>
       )}
       {children}
-      {hydrated && <VoiceCommandDock />}
+      {hydrated && !immersiveRideHome && <VoiceCommandDock />}
     </>
   );
 }

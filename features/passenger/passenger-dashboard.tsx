@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bell, CheckCircle2, Heart, MapPin, ShieldCheck, Sparkles } from "lucide-react";
+import { Bell, CarFront, Heart, MapPin, Navigation, ShieldCheck, Sparkles } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,6 @@ export function PassengerDashboard() {
   const user = useAuthStore((state) => state.user);
   const unreadCount = useNotificationStore((state) => state.notifications.filter((item) => !item.read).length);
   const destination = useRideStore((state) => state.destination);
-  const currentRide = useRideStore((state) => state.currentRide);
   const flowStep = useRideStore((state) => state.flowStep);
   const lastToast = useAppDataStore((state) => state.lastToast);
   const clearToast = useAppDataStore((state) => state.clearToast);
@@ -35,12 +34,16 @@ export function PassengerDashboard() {
   }
 
   return (
-    <div className="relative min-h-[calc(100dvh-9.5rem)] overflow-hidden bg-[#f8fafd]">
-      <FakeMap className="min-h-[calc(100dvh-9.5rem)] rounded-none shadow-none" showStatusSheet={false} />
+    <div className="relative h-full min-h-[32rem] overflow-hidden bg-[#f8fafd]">
+      <FakeMap
+        className="h-full min-h-[32rem] rounded-none shadow-none"
+        showMapChrome={false}
+        showStatusSheet={false}
+      />
 
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-40 p-4">
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-40 p-4 pt-[max(1rem,env(safe-area-inset-top))]">
         <motion.div
-          className="pointer-events-auto rounded-[1.4rem] border border-white/75 bg-white/94 p-3 shadow-premium backdrop-blur-xl"
+          className="pointer-events-auto rounded-[1.45rem] border border-white/75 bg-white/95 p-3 shadow-premium backdrop-blur-xl"
           initial={{ y: -18, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
         >
@@ -48,13 +51,15 @@ export function PassengerDashboard() {
             <div className="flex min-w-0 items-center gap-3">
               <Avatar initials={user.avatar} className="size-11" />
               <div className="min-w-0">
-                <p className="truncate text-sm font-bold">Ola, {user.name.split(" ")[0]}</p>
-                <p className="truncate text-xs text-muted-foreground">
+                <p className="truncate text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">
+                  Ola, {user.name.split(" ")[0]}
+                </p>
+                <p className="truncate text-sm font-bold">
                   {flowStep === "choosing_destination" ? "Escolha um destino" : destination.address}
                 </p>
               </div>
             </div>
-            <Button asChild variant="outline" size="icon" className="relative shrink-0 rounded-2xl">
+            <Button asChild variant="outline" size="icon" className="relative shrink-0 rounded-2xl bg-white">
               <Link href="/notificacoes" aria-label="Notificacoes">
                 <Bell className="size-4" aria-hidden="true" />
                 {unreadCount > 0 && (
@@ -66,40 +71,38 @@ export function PassengerDashboard() {
             </Button>
           </div>
         </motion.div>
+
+        <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-1">
+          <Badge className="shrink-0 border-white/70 bg-white/92 text-[#188038] shadow-soft">
+            <ShieldCheck className="mr-1 size-3.5" aria-hidden="true" />
+            PCD verificado
+          </Badge>
+          <Badge className="shrink-0 border-white/70 bg-white/92 text-[#1a73e8] shadow-soft">
+            <Sparkles className="mr-1 size-3.5" aria-hidden="true" />
+            Tarifa social
+          </Badge>
+          <Badge className="shrink-0 border-white/70 bg-white/92 text-foreground shadow-soft">
+            <CarFront className="mr-1 size-3.5" aria-hidden="true" />
+            4 perto
+          </Badge>
+        </div>
       </div>
 
-      <div className="absolute left-4 top-24 z-40 grid gap-2">
-        <Badge className="w-fit border-white/70 bg-white/92 text-[#188038] shadow-soft">
-          <ShieldCheck className="mr-1 size-3.5" aria-hidden="true" />
-          PCD verificado
-        </Badge>
-        <Badge className="w-fit border-white/70 bg-white/92 text-[#1a73e8] shadow-soft">
-          <Sparkles className="mr-1 size-3.5" aria-hidden="true" />
-          Tarifa social ativa
-        </Badge>
-      </div>
-
-      <div className="absolute right-4 top-24 z-40 grid gap-2">
-        <Button asChild variant="outline" size="icon" className="rounded-2xl bg-white/92 shadow-soft">
+      <div className="absolute right-4 top-[8.4rem] z-40 grid gap-2">
+        <Button asChild variant="outline" size="icon" className="rounded-2xl bg-white/92 shadow-soft backdrop-blur">
           <Link href="/locais" aria-label="Locais acessiveis">
             <MapPin className="size-4 text-[#ea4335]" aria-hidden="true" />
           </Link>
         </Button>
-        <Button asChild variant="outline" size="icon" className="rounded-2xl bg-white/92 shadow-soft">
+        <Button asChild variant="outline" size="icon" className="rounded-2xl bg-white/92 shadow-soft backdrop-blur">
           <Link href="/favoritos" aria-label="Favoritos">
             <Heart className="size-4 text-brand-primary" aria-hidden="true" />
           </Link>
         </Button>
+        <Button type="button" variant="outline" size="icon" className="rounded-2xl bg-white/92 shadow-soft backdrop-blur" aria-label="Centralizar rota">
+          <Navigation className="size-4 text-[#1a73e8]" aria-hidden="true" />
+        </Button>
       </div>
-
-      {currentRide?.status === "completed" && (
-        <div className="absolute inset-x-4 top-36 z-40">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-sm font-bold text-emerald-700 shadow-soft">
-            <CheckCircle2 className="mr-2 inline size-4" aria-hidden="true" />
-            Corrida encerrada. Finalize pagamento e avaliacao.
-          </div>
-        </div>
-      )}
 
       <RideBottomSheet user={user} />
       <PassengerOnboarding />
